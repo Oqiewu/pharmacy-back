@@ -54,10 +54,10 @@ class OrganizationRepository extends ServiceEntityRepository
     */
    public function findByFirm(string $value): array
    {
-       return $this->createQueryBuilder('o')
-           ->andWhere('o.firm = :val')
+       return $this->createQueryBuilder('b')
+           ->where('b.firm = :val')
            ->setParameter('val', $value)
-           ->orderBy('o.id', 'ASC')
+           ->orderBy('b.firm', 'ASC')
            ->getQuery()
            ->getResult()
        ;

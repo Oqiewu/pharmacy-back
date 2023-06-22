@@ -8,13 +8,15 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Pharmacy;
 use App\Repository\PharmacyRepository;
+use App\Repository\OrganizationRepository;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class PharmacyController extends AbstractController
 {
     public function __construct(
         private SerializerInterface $serializer,
-        private PharmacyRepository $pharmacy_repository
+        private PharmacyRepository $pharmacy_repository,
+        private OrganizationRepository $organization_repository
     ) {}
 
     // Add new pharmacy
@@ -22,11 +24,16 @@ class PharmacyController extends AbstractController
     public function addPharmacy(Request $request): JsonResponse
     {
 
-        $pharmacy_request = $this->serializer->deserialize($request->getContent(),  Pharmacy::class, 'json');
+        $pharmacy = $this->serializer->deserialize($request->getContent(),  Pharmacy::class, 'json');
+        $data = json_decode($request->getContent(), true);
 
-        $this->pharmacy_repository->save($pharmacy_request, true);
+        $organization = $this->organization_repository->findById($data['organization']);
 
-        return $this->json($pharmacy_request);
+        $pharmacy->setOrganization($organization);
+
+        $this->pharmacy_repository->save($pharmacy, true);
+
+        return $this->json($pharmacy);
     }
 
     // Edit selected pharmacy
@@ -34,11 +41,12 @@ class PharmacyController extends AbstractController
     public function editPharmacy(int $id, Request $request): JsonResponse
     {
         $editable_data = $this->serializer->deserialize($request->getContent(), Pharmacy::class, 'json');
+        $data = json_decode($request->getContent(), true);
 
         // Getting new values
         $pharmacy_name  = $editable_data->getPharmacyName();
         $address        = $editable_data->getAddress();
-        $organization   = $editable_data->getOrganization();
+        $organization = $this->organization_repository->findById($data['organization']);
         $coordinates    = $editable_data->getCoordinates();
         $phone          = $editable_data->getPhone();
         $schedule       = $editable_data->getSchedule();
@@ -48,14 +56,13 @@ class PharmacyController extends AbstractController
         
 
         // Setting new values
-        $pharmacy
-            ->setPharmacyName($pharmacy_name)
-            ->setAddress($address)
-            ->setOrganization($organization)
-            ->setCoordinates($coordinates)
-            ->setPhone($phone)
-            ->setSchedule($schedule)
-            ->setStatus($status);
+        !$pharmacy_name ?: $pharmacy->setPharmacyName($pharmacy_name);
+        !$address       ?: $pharmacy->setAddress($address);
+        !$organization  ?: $pharmacy->setOrganization($organization);
+        !$coordinates   ?: $pharmacy->setCoordinates($coordinates);
+        !$phone         ?: $pharmacy->setPhone($phone);
+        !$schedule      ?: $pharmacy->setSchedule($schedule);
+        !$status        ?: $pharmacy->setStatus($status);
 
         $this->pharmacy_repository->save($pharmacy, true);
 

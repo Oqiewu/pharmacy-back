@@ -32,11 +32,13 @@ class LoginController extends AbstractController
         // Checking correctness password
         if (password_verify($user_request->getPassword(), $user->getPassword())) 
         {
-
             // Return JWT
-            $access_token    = $this->access_token->getTokenUser($user);
+            $access_token = $this->access_token->getTokenUser($user);
             return $this->json($access_token);
         }
-        throw new \Exception;
+        else 
+        {
+            throw new \Exception;
+        }
     }
 }

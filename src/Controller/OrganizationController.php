@@ -25,9 +25,9 @@ class OrganizationController extends AbstractController
         // Organization assembly
         $organization = $this->serializer->deserialize($request->getContent(), Organization::class, 'json');
 
+        $organization->setFirm('ООО');
         // Save new organization
-        $this->organizationRepository->save($organization, true);
-        
+        $this->organizationRepository->save($organization, true);        
         return $this->json($organization);
     }
 
@@ -60,16 +60,15 @@ class OrganizationController extends AbstractController
         
 
         // Setting new values
-        $organization
-            ->setOrganizationName($organization_name)
-            ->setShortname($short_name)
-            ->setInn($inn)
-            ->setRegistrationNumber($registration_number)
-            ->setKpp($kpp)
-            ->setIfnsCode($ifns_code)
-            ->setData($data)
-            ->setPassport($passport)
-            ->setLegalAddress($legal_address);
+        !$organization_name    ?: $organization->setOrganizationName($organization_name);
+        !$short_name           ?: $organization->setShortname($short_name);
+        !$inn                  ?: $organization->setInn($inn);
+        !$registration_number  ?: $organization->setRegistrationNumber($registration_number);
+        !$kpp                  ?: $organization->setKpp($kpp);
+        !$ifns_code            ?: $organization->setIfnsCode($ifns_code);
+        !$data                 ?: $organization->setData($data);
+        !$passport             ?: $organization->setPassport($passport);
+        !$legal_address        ?: $organization->setLegalAddress($legal_address);
 
         $this->organizationRepository->save($organization, true);
 
@@ -95,6 +94,8 @@ class OrganizationController extends AbstractController
     {
         $sole_trader = $this->serializer->deserialize($request->getContent(), Organization::class, 'json');
 
+        $sole_trader->setFirm('ИП');
+
         $this->organizationRepository->save($sole_trader, true);
 
         return $this->json($sole_trader);
@@ -113,23 +114,32 @@ class OrganizationController extends AbstractController
         $editable_data = $this->serializer->deserialize($request->getContent(), Organization::class, 'json');
 
         $organization_name = $editable_data->getOrganizationName();
-        $orgnip           = $editable_data->getOgrnip();
-        $inn              = $editable_data->getInn();
-        $account_number   = $editable_data->getAccountNumber();
-        $account_type     = $editable_data->getAccountType();
-        $bank_bik         = $editable_data->getBankBik();
+        $orgnip            = $editable_data->getOgrnip();
+        $inn               = $editable_data->getInn();
+        $account_number    = $editable_data->getAccountNumber();
+        $account_type      = $editable_data->getAccountType();
+        $bank_bik          = $editable_data->getBankBik();
         
         $sole_trader = $this->organizationRepository->findById($id);
         
-        $sole_trader
-            ->setOrganizationName($organization_name)
-            ->setOgrnip($orgnip)
-            ->setInn($inn)
-            ->setAccountNumber($account_number)
-            ->setAccountType($account_type)
-            ->setBankBik($bank_bik);
+        !$organization_name ?: $sole_trader->setOrganizationName($organization_name);
+        !$orgnip            ?: $sole_trader->setOgrnip($orgnip);
+        !$inn               ?: $sole_trader->setInn($inn);
+        !$account_number    ?: $sole_trader->setAccountNumber($account_number);
+        !$account_type      ?: $sole_trader->setAccountType($account_type);
+        !$bank_bik          ?: $sole_trader->setBankBik($bank_bik);
 
         $this->organizationRepository->save($sole_trader, true);
+
+        return $this->json($sole_trader);
+    }
+
+    #[Route('/soletrader/{id}', name: 'app_delete_soletrader', methods: ['DELETE'])]
+    public function delete_soletrader(int $id): JsonResponse
+    {
+        $sole_trader = $this->organizationRepository->findById($id);
+
+        $this->organizationRepository->remove($sole_trader, true);
 
         return $this->json($sole_trader);
     }

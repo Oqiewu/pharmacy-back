@@ -9,6 +9,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Repository\OrganizationRepository;
+use App\Repository\PharmacyRepository;
 use App\Services\Validation;
 use App\Services\Password;
 
@@ -18,7 +20,9 @@ class UserController extends AbstractController
         private UserRepository $user_repository,
         private Validation $validation,
         private SerializerInterface $serializer,
-        private Password $password
+        private Password $password,
+        private OrganizationRepository $organization_repository,
+        private PharmacyRepository $pharmacy_repository
     ) {}
 
     // Add new user
@@ -26,12 +30,17 @@ class UserController extends AbstractController
     public function registrationUser(Request $request): JsonResponse
     {
         $user = $this->serializer->deserialize($request->getContent(), User::class, 'json');
+        $data = json_decode($request->getContent(), true);
         if($this->validation->validationToEmail($user))
         {
             $hashed_password = $this->password->gen_hashed_password($user->getPassword());
+            $organization    = $this->organization_repository->findById($data['organization']);
+            $pharmacy        = $this->pharmacy_repository->findById($data['pharmacy']);
 
-            $user->setPassword($hashed_password);
-            $user->setRoles(['Продавец']);
+            $user
+                ->setPassword($hashed_password)
+                ->setOrganization($organization)
+                ->setPharmacy($pharmacy);
 
             $this->user_repository->save($user, true);
 
@@ -45,9 +54,11 @@ class UserController extends AbstractController
     public function editUser(int $id, Request $request): JsonResponse
     {
         $editable_data = $this->serializer->deserialize($request->getContent(), User::class, 'json');
+        $data = json_decode($request->getContent(), true);
 
         // Getting new values
-        $organization       = $editable_data->getOrganization();
+        $organization    = $this->organization_repository->findById($data['organization']);
+        $pharmacy        = $this->pharmacy_repository->findById($data['pharmacy']);
         $tab_number         = $editable_data->getTabNumber();
         $email              = $editable_data->getUserIdentifier();
         $password           = $editable_data->getPassword();
@@ -58,6 +69,7 @@ class UserController extends AbstractController
         $gender             = $editable_data->getGender();
         $registration_data  = $editable_data->getRegistrationData();
         $phone              = $editable_data->getPhone();
+        $role               = $editable_data->getRoles();
         
         if($this->validation->validationToEmail($editable_data))
         {
@@ -66,25 +78,25 @@ class UserController extends AbstractController
             $hashed_password = $this->password->gen_hashed_password($password);
             
             // Setting new values
-            $user
-                ->setOrganization($organization)
-                ->setTabNumber($tab_number)
-                ->setUserIdentifier($email)
-                ->setPassword($hashed_password)
-                ->setFirstName($first_name)
-                ->setLastName($last_name)
-                ->setPatronymic($patronymic)
-                ->setDateOfBirth($date_of_birth)
-                ->setGender($gender)
-                ->setRegistrationData($registration_data)
-                ->setPhone($phone)
-                ->setRoles(['Admin']);
+            !$organization       ?: $user->setOrganization($organization);
+            !$pharmacy           ?: $user->setPharmacy($pharmacy);
+            !$tab_number         ?: $user->setTabNumber($tab_number);
+            !$email              ?: $user->setUserIdentifier($email);
+            !$password           ?: $user->setPassword($hashed_password);
+            !$first_name         ?: $user->setFirstName($first_name);
+            !$last_name          ?: $user->setLastName($last_name);
+            !$patronymic         ?: $user->setPatronymic($patronymic);
+            !$date_of_birth      ?: $user->setDateOfBirth($date_of_birth);
+            !$gender             ?: $user->setGender($gender);
+            !$registration_data  ?: $user->setRegistrationData($registration_data);
+            !$phone              ?: $user->setPhone($phone);
+            !$role               ?: $user->setRoles([$role]);
     
             $this->user_repository->save($user, true);
     
             return $this->json($user);
         } else {
-            return $this->json($editable_data);
+            throw new \Exception;
         }   
     }
 

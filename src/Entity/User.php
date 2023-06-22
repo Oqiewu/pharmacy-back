@@ -18,6 +18,9 @@ class User implements UserInterface
     #[ORM\ManyToOne(targetEntity: Organization::class, inversedBy: 'organization')]
     private $organization;
 
+    #[ORM\ManyToOne(targetEntity: Pharmacy::class, inversedBy: 'pharmacy')]
+    private $pharmacy;
+
     #[ORM\Column(length: 255, unique: true)]
     private ?string $tab_number = null;
 
@@ -42,6 +45,9 @@ class User implements UserInterface
     #[ORM\Column(nullable: false)]
     private ?string $gender = null;
 
+    #[ORM\Column(nullable: false)]
+    private ?string $subdomain = null;
+
     #[ORM\Column(length: 255, nullable: false)]
     private ?string $registration_data = null;
 
@@ -64,6 +70,18 @@ class User implements UserInterface
     public function setOrganization(Organization $organization): static
     {
         $this->organization = $organization;
+
+        return $this;
+    }
+
+    public function getPharmacy(): ?Pharmacy
+    {
+        return $this->pharmacy;
+    }
+
+    public function setPharmacy(Pharmacy $pharmacy): static
+    {
+        $this->pharmacy = $pharmacy;
 
         return $this;
     }
@@ -185,6 +203,18 @@ class User implements UserInterface
     public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getSubdomain(): ?string
+    {
+        return $this->subdomain;
+    }
+
+    public function setSubdomain(?string $subdomain): static
+    {
+        $this->subdomain = $subdomain;
 
         return $this;
     }
