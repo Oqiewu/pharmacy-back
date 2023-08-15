@@ -40,7 +40,7 @@ class ActiveSubstanceController extends AbstractController
     #[Route('/substance/all', name: 'app_all_substances', methods:['GET'])]
     public function getAllActiveSubstances(): Response
     {
-        return $this->json($this->active_substance_repositroy->findAllGoodsMargins());
+        return $this->json($this->active_substance_repositroy->findAllActiveSubstances());
     }
 
     #[Route('/substance/{id}', name: 'app_edit_substances', methods: ['PUT'])]

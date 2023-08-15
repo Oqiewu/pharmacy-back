@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\TreatyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: TreatyRepository::class)]
 class Treaty
@@ -16,8 +18,8 @@ class Treaty
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $treaty_number = null;
 
-    #[ORM\Column]
-    private ?string $treaty_type = null;
+    #[ORM\ManyToMany(targetEntity: TreatyType::class, inversedBy: 'treaty_type')]
+    private $treaty_type;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $treaty_date = null;
@@ -29,7 +31,7 @@ class Treaty
     private ?string $claim_period = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $deferment_fee = null;
+    private ?int $deferment_fee = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $surplus_interest = null;
@@ -85,6 +87,11 @@ class Treaty
     #[ORM\ManyToOne(targetEntity: Provider::class, inversedBy: 'treaty')]
     private $provider;
 
+    public function __construct()
+    {
+        $this->treaty_type = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -102,12 +109,12 @@ class Treaty
         return $this;
     }
 
-    public function getTreatyType(): ?string
+    public function getTreatyType(): ?PersistentCollection 
     {
         return $this->treaty_type;
     }
 
-    public function setTreatyType(string $treaty_type): static
+    public function setTreatyType(PersistentCollection  $treaty_type): static
     {
         $this->treaty_type = $treaty_type;
 
@@ -374,6 +381,22 @@ class Treaty
     public function setProvider(?Provider $provider): static
     {
         $this->provider = $provider;
+
+        return $this;
+    }
+
+    public function addTreatyType(TreatyType $treaty_type): static
+    {
+        if (!$this->treaty_type->contains($treaty_type)) {
+            $this->treaty_type->add($treaty_type);
+        }
+
+        return $this;
+    }
+
+    public function removeTreatyType(TreatyType $treaty_type): static
+    {
+        $this->treaty_type->removeElement($treaty_type);
 
         return $this;
     }

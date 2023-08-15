@@ -46,7 +46,7 @@ class PharmacyController extends AbstractController
         // Getting new values
         $pharmacy_name  = $editable_data->getPharmacyName();
         $address        = $editable_data->getAddress();
-        $organization = $this->organization_repository->findById($data['organization']);
+        $organization   = $this->organization_repository->findById($data['organization']);
         $coordinates    = $editable_data->getCoordinates();
         $phone          = $editable_data->getPhone();
         $schedule       = $editable_data->getSchedule();

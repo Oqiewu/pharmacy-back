@@ -153,6 +153,8 @@ class Product
     {
         $this->manufacturer = new ArrayCollection();
         $this->plan_pharmacy = new ArrayCollection();
+        $this->goods_margin = new ArrayCollection();
+        $this->type_markup = new ArrayCollection();
     }
 
 
