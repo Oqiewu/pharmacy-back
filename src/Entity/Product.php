@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\ActiveSubstance;
 use Doctrine\ORM\PersistentCollection;
@@ -18,7 +17,7 @@ class Product
     private ?int $id = null;
 
     // Основной
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 500)]
     private ?string $product_name = null;
 
     // #[ORM\Column(nullable: true)]
@@ -42,14 +41,14 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?int $reserve = null;
 
-    #[ORM\ManyToOne(targetEntity: Type::class, inversedBy: 'type', cascade: ['persist'])]
-    private $type;
+    // #[ORM\ManyToOne(targetEntity: Type::class, inversedBy: 'type', cascade: ['persist'])]
+    // private $type;
 
-    #[ORM\ManyToOne(targetEntity: Subtype::class, inversedBy: 'subtype')]
-    private $subtype;
+    // #[ORM\ManyToOne(targetEntity: Subtype::class, inversedBy: 'subtype')]
+    // private $subtype;
 
-    #[ORM\ManyToOne(targetEntity: ActiveSubstance::class, inversedBy: 'active_substance')]
-    private $active_substance;
+    // #[ORM\ManyToOne(targetEntity: ActiveSubstance::class, inversedBy: 'active_substance')]
+    // private $active_substance;
 
     #[ORM\Column(nullable: true)]
     private ?bool $obligatory_1 = null;
@@ -64,9 +63,12 @@ class Product
     private ?bool $mandatory_assortyment = null;
 
     #[ORM\Column(nullable: true)]
+    private ?string $label_print = null;
+
+    #[ORM\Column(nullable: true)]
     private ?bool $label_printing = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $tax = null;
 
     #[ORM\Column(nullable: true)]
@@ -75,30 +77,33 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?bool $is_not_public = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $batch = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $is_dont_take_manufacturer = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $sales_limit = null;
 
-    // Изготовитель
-    #[ORM\ManyToMany(targetEntity: Manufacturer::class, inversedBy: 'manufacturer')]
-    private $manufacturer;
+    #[ORM\Column(nullable: true)]
+    private ?string $manufacturer = null;
 
-    #[ORM\Column]
+    // Изготовитель
+    // #[ORM\ManyToMany(targetEntity: Manufacturer::class, inversedBy: 'manufacturer')]
+    // private $manufacturer;
+
+    #[ORM\Column(nullable: true)]
     private ?int $price_in_register = null;
 
     #[ORM\Column(nullable: true)]
     private ?string $date_of_registration = null;
 
     // Единица измерения
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?string $base_unit = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?string $unit_for_sales = null;
 
     #[ORM\Column(nullable: true)]
@@ -115,8 +120,8 @@ class Product
 
     // Ассоритментный план (АП)
 
-    #[ORM\ManyToMany(targetEntity: Pharmacy::class, inversedBy: 'pharmacy')]
-    private $plan_pharmacy;
+    // #[ORM\ManyToMany(targetEntity: Pharmacy::class, inversedBy: 'pharmacy')]
+    // private $plan_pharmacy;
 
     #[ORM\Column(nullable: true)]
     private ?bool $is_included_plan = null;
@@ -138,22 +143,24 @@ class Product
 
     // Наценки
 
-    #[ORM\ManyToMany(targetEntity: GoodsMargin::class, inversedBy: 'goods_margin')]
-    private $goods_margin;
+    // #[ORM\ManyToMany(targetEntity: GoodsMargin::class, inversedBy: 'goods_margin')]
+    // private $goods_margin;
     
-    #[ORM\ManyToMany(targetEntity: TypeMarkup::class, inversedBy: 'type_markup')]
-    private $type_markup;
+    // #[ORM\ManyToMany(targetEntity: TypeMarkup::class, inversedBy: 'type_markup')]
+    // private $type_markup;
 
     // Фикс цена
     
     #[ORM\Column(nullable: true)]
     private ?int $price = null;
 
-    public function __construct()
-    {
-        $this->manufacturer = new ArrayCollection();
-        $this->plan_pharmacy = new ArrayCollection();
-    }
+    // public function __construct()
+    // {
+    //     // $this->manufacturer = new ArrayCollection();
+    //     $this->plan_pharmacy = new ArrayCollection();
+    //     $this->goods_margin = new ArrayCollection();
+    //     $this->type_markup = new ArrayCollection();
+    // }
 
 
     public function getId(): ?int
@@ -257,41 +264,41 @@ class Product
         return $this;
     }
 
-    public function getType(): ?Type
-    {
-        return $this->type;
-    }
+    // public function getType(): ?Type
+    // {
+    //     return $this->type;
+    // }
 
-    public function setType(Type $type): static
-    {
-        $this->type = $type;
+    // public function setType(Type $type): static
+    // {
+    //     $this->type = $type;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function getSubtype(): ?Subtype
-    {
-        return $this->subtype;
-    }
+    // public function getSubtype(): ?Subtype
+    // {
+    //     return $this->subtype;
+    // }
 
-    public function setSubtype(Subtype $subtype): static
-    {
-        $this->subtype = $subtype;
+    // public function setSubtype(Subtype $subtype): static
+    // {
+    //     $this->subtype = $subtype;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function getActiveSubstance(): ?ActiveSubstance
-    {
-        return $this->active_substance;
-    }
+    // public function getActiveSubstance(): ?ActiveSubstance
+    // {
+    //     return $this->active_substance;
+    // }
 
-    public function setActiveSubstance(?ActiveSubstance $active_substance): static
-    {
-        $this->active_substance = $active_substance;
+    // public function setActiveSubstance(?ActiveSubstance $active_substance): static
+    // {
+    //     $this->active_substance = $active_substance;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getIsObligatory1(): ?bool
     {
@@ -337,6 +344,18 @@ class Product
     public function setMandatoryAssortyment(bool $mandatory_assortyment): static
     {
         $this->mandatory_assortyment = $mandatory_assortyment;
+
+        return $this;
+    }
+
+    public function getLabelPrint(): ?string
+    {
+        return $this->label_print;
+    }
+
+    public function setLabelPrint(string $label_print): static
+    {
+        $this->label_print = $label_print;
 
         return $this;
     }
@@ -425,12 +444,12 @@ class Product
         return $this;
     }
 
-    public function getManufacturer(): ?PersistentCollection
+    public function getManufacturer(): ?string
     {
         return $this->manufacturer;
     }
 
-    public function setManufacturer(PersistentCollection $manufacturer): static
+    public function setManufacturer(string $manufacturer): static
     {
         $this->manufacturer = $manufacturer;
 
@@ -509,17 +528,17 @@ class Product
         return $this;
     }
 
-    public function getPlanPharmacy(): ?PersistentCollection
-    {
-        return $this->plan_pharmacy;
-    }
+    // public function getPlanPharmacy(): ?PersistentCollection
+    // {
+    //     return $this->plan_pharmacy;
+    // }
 
-    public function setPlanPharmacy(PersistentCollection $plan_pharmacy): static
-    {
-        $this->plan_pharmacy = $plan_pharmacy;
+    // public function setPlanPharmacy(PersistentCollection $plan_pharmacy): static
+    // {
+    //     $this->plan_pharmacy = $plan_pharmacy;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getIsIncludedPlan(): ?bool
     {
@@ -593,29 +612,29 @@ class Product
         return $this;
     }
 
-    public function getGoodsMargins(): ?PersistentCollection
-    {
-        return $this->goods_margin;
-    }
+    // public function getGoodsMargins(): ?PersistentCollection
+    // {
+    //     return $this->goods_margin;
+    // }
 
-    public function setGoodsMargins(PersistentCollection $goods_margin): static
-    {
-        $this->goods_margin = $goods_margin;
+    // public function setGoodsMargins(PersistentCollection $goods_margin): static
+    // {
+    //     $this->goods_margin = $goods_margin;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function getTypeMarkup(): ?PersistentCollection
-    {
-        return $this->type_markup;
-    }
+    // public function getTypeMarkup(): ?PersistentCollection
+    // {
+    //     return $this->type_markup;
+    // }
 
-    public function setTypeMarkup(PersistentCollection $type_markup): static
-    {
-        $this->type_markup = $type_markup;
+    // public function setTypeMarkup(PersistentCollection $type_markup): static
+    // {
+    //     $this->type_markup = $type_markup;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getPrice(): ?int
     {
@@ -762,35 +781,35 @@ class Product
         return $this->is_custom;
     }
 
-    public function addManufacturer(Manufacturer $manufacturer): static
-    {
-        if (!$this->manufacturer->contains($manufacturer)) {
-            $this->manufacturer->add($manufacturer);
-        }
+    // public function addManufacturer(Manufacturer $manufacturer): static
+    // {
+    //     if (!$this->manufacturer->contains($manufacturer)) {
+    //         $this->manufacturer->add($manufacturer);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeManufacturer(Manufacturer $manufacturer): static
-    {
-        $this->manufacturer->removeElement($manufacturer);
+    // public function removeManufacturer(Manufacturer $manufacturer): static
+    // {
+    //     $this->manufacturer->removeElement($manufacturer);
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function addPlanPharmacy(Pharmacy $planPharmacy): static
-    {
-        if (!$this->plan_pharmacy->contains($planPharmacy)) {
-            $this->plan_pharmacy->add($planPharmacy);
-        }
+    // public function addPlanPharmacy(Pharmacy $planPharmacy): static
+    // {
+    //     if (!$this->plan_pharmacy->contains($planPharmacy)) {
+    //         $this->plan_pharmacy->add($planPharmacy);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removePlanPharmacy(Pharmacy $planPharmacy): static
-    {
-        $this->plan_pharmacy->removeElement($planPharmacy);
+    // public function removePlanPharmacy(Pharmacy $planPharmacy): static
+    // {
+    //     $this->plan_pharmacy->removeElement($planPharmacy);
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

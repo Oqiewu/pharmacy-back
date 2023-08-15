@@ -13,7 +13,7 @@ use App\Repository\ActiveSubstanceRepository;
 use App\Repository\TypeRepository;
 use App\Repository\SubtypeRepository;
 use App\Repository\ManufacturerRepository;
-// use App\Services\UploadPhoto;
+use App\Services\UploadPhoto;
 
 class ProductController extends AbstractController
 {
@@ -23,7 +23,7 @@ class ProductController extends AbstractController
         private ActiveSubstanceRepository $active_substance_repository,
         private TypeRepository $type_repository,
         private SubtypeRepository $subtype_repository,
-        // private UploadPhoto $upload_photo,
+        private UploadPhoto $upload_photo,
         private ManufacturerRepository $manufacturer_repository
     ) {}
 
@@ -36,9 +36,9 @@ class ProductController extends AbstractController
         $type = $this->type_repository->findById($data['type']);
         $subtype = $this->subtype_repository->findById($data['subtype']);
         $active_substance = $this->active_substance_repository->findById($data['active_substance']);
-        // $photoFileName = $this->upload_photo->upload($data['photo']);
+        $photoFileName = $this->upload_photo->upload($data['photo']);
 
-        // $product->setPhoto($photoFileName);
+        $product->setPhoto($photoFileName);
         $product->setType($type);
         $product->setSubType($subtype);
         $product->setActiveSubstance($active_substance);
@@ -106,16 +106,16 @@ class ProductController extends AbstractController
         $goods_margin                                                            = $editable_data->getGoodsMargins();
         $type_markup                                                             = $editable_data->getTypeMarkup();
         $price                                                                   = $editable_data->getPrice();
-        // !array_key_exists('photo', $data) ? $photoFileName = '' : $photoFileName = $this->upload_photo->upload($data['photo']);
+        !array_key_exists('photo', $data) ? $photoFileName = '' : $photoFileName = $this->upload_photo->upload($data['photo']);
 
         $product = $this->product_repository->findById($id);
         
-        // $array_photo = $product->getPhoto();
+        $array_photo = $product->getPhoto();
 
-        // $array_photo->array_push($photoFileName);
+        $array_photo->array_push($photoFileName);
 
         // Setting new values
-        // !$photoFileName                    ?: $product->setPhoto($array_photo);
+        !$photoFileName                    ?: $product->setPhoto($array_photo);
         !$product_name                     ?: $product->setProductName($product_name);
         !$vital_necessity                  ?: $product->setVitalNecessity($vital_necessity);
         !$total                            ?: $product->setTotal($total);

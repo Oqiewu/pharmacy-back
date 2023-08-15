@@ -34,13 +34,11 @@ RUN curl -Ss getcomposer.org/installer | php
 RUN curl -sS https://get.symfony.com/cli/installer | bash \
     && mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
-# Установите Xdebug
-RUN apk add --no-cache $PHPIZE_DEPS linux-headers \
-    && pecl install xdebug-3.2.1 \
-    && docker-php-ext-enable xdebug
+COPY --chown=data:www-data docker/php/conf.d/local.ini $PHP_INI_DIR/conf.d
+RUN chown -R www-data:www-data .
 
-# Настройте Xdebug
-COPY docker/php/conf.d/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+RUN   sed -i "s|memory_limit = 128M|memory_limit = 256M |g" $PHP_INI_DIR/php.ini-development
+RUN   sed -i "s|memory_limit = 128M|memory_limit = 256M |g" $PHP_INI_DIR/php.ini-production
 
 # Установите Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer

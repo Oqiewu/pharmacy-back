@@ -24,9 +24,6 @@ class Pharmacy
     private $organization;
 
     #[ORM\Column(length: 255)]
-    private ?string $coordinates = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255)]
@@ -72,18 +69,6 @@ class Pharmacy
     public function setOrganization(Organization $organization): static
     {
         $this->organization = $organization;
-
-        return $this;
-    }
-
-    public function getCoordinates(): ?string
-    {
-        return $this->coordinates;
-    }
-
-    public function setCoordinates(string $coordinates): static
-    {
-        $this->coordinates = $coordinates;
 
         return $this;
     }

@@ -69,5 +69,12 @@ class SubtypeController extends AbstractController
 
         return $this->json($subtype);
     }
+
+    
+    #[Route('/type/{id}/subtype', name: 'app_all_subtypes_by_types', methods:['GET'])]
+    public function getAllSubTypesByType(int $id): Response
+    {
+        return $this->json($this->subtype_repository->findByType($id));
+    }
 }
 

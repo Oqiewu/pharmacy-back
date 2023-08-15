@@ -38,6 +38,13 @@ class OrganizationController extends AbstractController
         return $this->json($this->organizationRepository->findByFirm("ООО"));
     }
 
+    
+    #[Route('/organization/{id}', name: 'app_get_organization', methods:['GET'])]
+    public function getOrganization(int $id): Response
+    {
+        return $this->json($this->organizationRepository->findById($id));
+    }
+
     // Edit selected organization
     #[Route('/organization/{id}', name: 'app_edit_organization', methods: ['PUT'])]
     public function edit_organization(int $id, Request $request): JsonResponse
@@ -106,6 +113,12 @@ class OrganizationController extends AbstractController
     public function get_all_sole_traders(): JsonResponse
     {
         return $this->json($this->organizationRepository->findByFirm('ИП'));
+    }
+
+    #[Route('/soletrader/{id}', name: 'app_get_sole_trader', methods:['GET'])]
+    public function getSoletrader(int $id): Response
+    {
+        return $this->json($this->organizationRepository->findById($id));
     }
 
     #[Route('/soletrader/{id}', name: 'app_edit_sole_trader', methods: ['PUT'])]

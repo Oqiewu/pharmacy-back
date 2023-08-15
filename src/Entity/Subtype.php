@@ -17,7 +17,7 @@ class Subtype
     #[ORM\Column(length: 255)]
     private ?string $subtype_name = null;
 
-    #[ORM\OneToOne(targetEntity: Type::class, inversedBy: 'type')]
+    #[ORM\ManyToOne(targetEntity: Type::class, inversedBy: 'type')]
     private $type;
 
     public function getId(): ?int

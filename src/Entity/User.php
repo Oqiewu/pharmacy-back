@@ -45,9 +45,6 @@ class User implements UserInterface
     #[ORM\Column(nullable: false)]
     private ?string $gender = null;
 
-    #[ORM\Column(nullable: false)]
-    private ?string $subdomain = null;
-
     #[ORM\Column(length: 255, nullable: false)]
     private ?string $registration_data = null;
 
@@ -203,18 +200,6 @@ class User implements UserInterface
     public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
-
-        return $this;
-    }
-
-    public function getSubdomain(): ?string
-    {
-        return $this->subdomain;
-    }
-
-    public function setSubdomain(?string $subdomain): static
-    {
-        $this->subdomain = $subdomain;
 
         return $this;
     }

@@ -51,7 +51,7 @@ class BarCodeRepository extends ServiceEntityRepository
     }
     
     /**
-    * @return Manufacturer[] Returns an array of Organization objects
+    * @return BarCode[] Returns an array of Barcode objects
     */
    public function findByManufacturer(int $value): array
    {
