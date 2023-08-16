@@ -18,7 +18,7 @@ class Treaty
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $treaty_number = null;
 
-    #[ORM\ManyToMany(targetEntity: TreatyType::class, inversedBy: 'treaty_type')]
+    #[ORM\ManyToOne(targetEntity: TreatyType::class, inversedBy: 'treaty_type')]
     private $treaty_type;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -87,11 +87,6 @@ class Treaty
     #[ORM\ManyToOne(targetEntity: Provider::class, inversedBy: 'treaty')]
     private $provider;
 
-    public function __construct()
-    {
-        $this->treaty_type = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -109,12 +104,12 @@ class Treaty
         return $this;
     }
 
-    public function getTreatyType(): ?PersistentCollection 
+    public function getTreatyType(): ?TreatyType 
     {
         return $this->treaty_type;
     }
 
-    public function setTreatyType(PersistentCollection  $treaty_type): static
+    public function setTreatyType(TreatyType  $treaty_type): static
     {
         $this->treaty_type = $treaty_type;
 

@@ -64,6 +64,9 @@ class Product
     private ?bool $mandatory_assortyment = null;
 
     #[ORM\Column(nullable: true)]
+    private ?string $label_print = null;
+
+    #[ORM\Column(nullable: true)]
     private ?bool $label_printing = null;
 
     #[ORM\Column]
@@ -339,6 +342,18 @@ class Product
     public function setMandatoryAssortyment(bool $mandatory_assortyment): static
     {
         $this->mandatory_assortyment = $mandatory_assortyment;
+
+        return $this;
+    }
+
+    public function getLabelPrint(): ?string
+    {
+        return $this->label_print;
+    }
+
+    public function setLabelPrint(string $label_print): static
+    {
+        $this->label_print = $label_print;
 
         return $this;
     }
