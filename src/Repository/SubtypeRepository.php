@@ -44,6 +44,11 @@ class SubtypeRepository extends ServiceEntityRepository
         return $this->findOneBy(["id" => $id]);
     }
 
+    public function findAllSubtypes(): array
+    {
+        return $this->findAll();
+    }
+
 //    /**
 //     * @return Subtype[] Returns an array of Subtype objects
 //     */
@@ -58,14 +63,17 @@ class SubtypeRepository extends ServiceEntityRepository
 //            ->getResult()
 //        ;
 //    }
-
-//    public function findOneBySomeField($value): ?Subtype
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+   /**
+    * @return Subtype[] Returns an array of Organization objects
+    */
+    public function findByType(int $value): array
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.type = :val')
+            ->setParameter('val', $value)
+            ->orderBy('s.type', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }
