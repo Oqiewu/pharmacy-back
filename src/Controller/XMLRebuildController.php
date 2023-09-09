@@ -35,6 +35,6 @@ class XMLRebuildController extends AbstractController
             }
         }
 
-        return $this->json('Не удалось добавить товар');
+        return $this->json('Номенклатура загружена');
     }
 }

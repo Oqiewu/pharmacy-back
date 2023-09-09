@@ -110,7 +110,7 @@ class TreatyController extends AbstractController
 
         // Getting new values
         $treaty_number                  = $editable_data->getTreatyNumber();
-        $treaty_type                    = $editable_data->getTreatyType();
+        !array_key_exists('treaty_type', $data) ? $treaty_type = '' : $treaty_type = $this->treaty_type_repository->findById($data['treaty_type']);
         $treaty_date                    = $editable_data->getTreatyDate();
         $expiration_date                = $editable_data->getExpirationDate();
         $claim_period                   = $editable_data->getClaimPeriod();
