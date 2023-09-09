@@ -27,8 +27,9 @@ class XMLRebuildController extends AbstractController
             {
                 $product = new Product();
 
-                $product->setProductName($i['trade_name_rus']);
+                $product->setProductName($i['prep_full']);
                 !array_key_exists('firms', $i) ?: $product->setManufacturer($i['firms']);
+                !array_key_exists('barcode', $i) ?: $product->setBarcode($i['barcode']);
 
                 $this->product_repository->save($product, true);
             }

@@ -90,11 +90,11 @@ class UserController extends AbstractController
             !$gender             ?: $user->setGender($gender);
             !$registration_data  ?: $user->setRegistrationData($registration_data);
             !$phone              ?: $user->setPhone($phone);
-            !$role               ?: $user->setRoles([$role]);
+            !$role               ?: $user->setRoles($role);
     
             $this->user_repository->save($user, true);
     
-            return $this->json($user);
+            return $this->json("Изменено!");
         } else {
             throw new \Exception;
         }   

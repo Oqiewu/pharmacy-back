@@ -141,6 +141,9 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?int $minimum_lot_order = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?string $barcode = null;
+
     // Наценки
 
     // #[ORM\ManyToMany(targetEntity: GoodsMargin::class, inversedBy: 'goods_margin')]
@@ -779,6 +782,18 @@ class Product
     public function isIsCustom(): ?bool
     {
         return $this->is_custom;
+    }
+
+    public function getBarcode(): ?string
+    {
+        return $this->barcode;
+    }
+
+    public function setBarcode(string $barcode): static
+    {
+        $this->barcode = $barcode;
+
+        return $this;
     }
 
     // public function addManufacturer(Manufacturer $manufacturer): static
