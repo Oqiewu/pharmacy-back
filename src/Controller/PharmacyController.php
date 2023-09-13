@@ -10,13 +10,15 @@ use App\Entity\Pharmacy;
 use App\Repository\PharmacyRepository;
 use App\Repository\OrganizationRepository;
 use Symfony\Component\Serializer\SerializerInterface;
+use App\Services\PharmacyService;
 
 class PharmacyController extends AbstractController
 {
     public function __construct(
         private SerializerInterface $serializer,
         private PharmacyRepository $pharmacy_repository,
-        private OrganizationRepository $organization_repository
+        private OrganizationRepository $organization_repository,
+        private PharmacyService $pharmacy_service
     ) {}
 
     // Add new pharmacy
@@ -85,5 +87,19 @@ class PharmacyController extends AbstractController
     public function get_all_pharmacies(): JsonResponse
     {
         return $this->json($this->pharmacy_repository->findAllPharmacies());
+    }
+
+    #[Route('/pharmacy/{id}', name: 'get_pharmacy_by_id', methods:['GET'])]
+    public function getPharmacyById(int $id): JsonResponse
+    {
+        $pharmacy = $this->pharmacy_repository->findById($id);
+
+        return $this->json($pharmacy);
+    }
+
+    #[Route('/pharmacy/number', name: 'get_number_of_pharmacies', methods:['GET'])]
+    public function getNumberOfPharmacies(int $id): JsonResponse
+    {
+        return $this->json($this->pharmacy_service->get_number_of_pharmacies());
     }
 }

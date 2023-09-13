@@ -93,7 +93,7 @@ class OrganizationController extends AbstractController
         return $this->json($organization);
     }
 
-    ###############################################################
+#######################################################################
 
     // Create new soletrader
     #[Route('/soletrader', name: 'app_sole_trader', methods: ['POST'])]
@@ -156,4 +156,15 @@ class OrganizationController extends AbstractController
 
         return $this->json($sole_trader);
     }
+
+
+#######################################################################
+    #all organizations
+
+    #[Route('/organizations/all', name: 'app_all_ooo_ip', methods: ['GET'])]
+    public function get_all_ooo_and_ip(): JsonResponse
+    {
+        return $this->json($this->organizationRepository->findAll());
+    }
+
 }
