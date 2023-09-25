@@ -49,7 +49,6 @@ class PharmacyController extends AbstractController
         $pharmacy_name  = $editable_data->getPharmacyName();
         $address        = $editable_data->getAddress();
         $organization   = $this->organization_repository->findById($data['organization']);
-        $coordinates    = $editable_data->getCoordinates();
         $phone          = $editable_data->getPhone();
         $schedule       = $editable_data->getSchedule();
         $status         = $editable_data->getStatus();
@@ -61,7 +60,6 @@ class PharmacyController extends AbstractController
         !$pharmacy_name ?: $pharmacy->setPharmacyName($pharmacy_name);
         !$address       ?: $pharmacy->setAddress($address);
         !$organization  ?: $pharmacy->setOrganization($organization);
-        !$coordinates   ?: $pharmacy->setCoordinates($coordinates);
         !$phone         ?: $pharmacy->setPhone($phone);
         !$schedule      ?: $pharmacy->setSchedule($schedule);
         !$status        ?: $pharmacy->setStatus($status);
