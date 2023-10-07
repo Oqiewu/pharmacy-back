@@ -22,7 +22,7 @@ class Provider
     #[ORM\Column(length: 255)]
     private ?string $provider_name = null;
 
-    #[ORM\OneToOne(targetEntity: ClientType::class, inversedBy: 'client_type')]
+    #[ORM\OneToOne(targetEntity: ClientType::class)]
     private $client_type;
 
     #[ORM\Column(length: 255, nullable: true)]

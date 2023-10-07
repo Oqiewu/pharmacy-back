@@ -22,13 +22,8 @@ class UploadPhoto
         $safeFilename = $this->slugger->slug($originalFilename);
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
 
-        $file->move($this->getTargetDirectory(), $fileName);
+        $file->move($this->targetDirectory, $fileName);
 
         return $fileName;
-    }
-
-    public function getTargetDirectory()
-    {
-        return $this->targetDirectory;
     }
 }
